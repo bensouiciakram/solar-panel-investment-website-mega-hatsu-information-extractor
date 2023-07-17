@@ -62,9 +62,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'mega_hatsu.pipelines.MegaHatsuPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'mega_hatsu.pipelines.MegaHatsuPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +88,68 @@ AUTOTHROTTLE_ENABLED = True
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36'
+
+
+FEED_EXPORTERS = {
+    'xlsx': 'scrapy_xlsx.XlsxItemExporter',
+}
+
+
+POSTGRES_USER = 'bensouici'
+POSTGRES_PASS = '1993'
+POSTGRES_HOST = 'localhost'
+POSTGRES_PORT = '5432'
+POSTGRES_DB = 'test_db'
+POSTGRES_TABLE = 'articles'
+
+
+FEED_EXPORT_FIELDS = [
+    'property_number',
+    'unit_price_per_unit_of_electricity_sold',
+    'total_capacity_of_power_conditioner',
+    'total_panel_capacity',
+    'Map',
+    'Type',
+    'Yield',
+    'assumed_investement_surface_yield',
+    'carbon_dioxid_emission_reduction',
+    'construction_costs',
+    'consumption_tax',
+    'conversion_efficiency',
+    'conversion_to_cedar_tree',
+    'estimated_annual_power_generation',
+    'estimated_electricity_sales_income',
+    'estimated_electricity_sales_revenue',
+    'fence',
+    'geodetic_point',
+    'guarantee',
+    'identifier',
+    'installation_location',
+    'insurrance_cost',
+    'interconnection_price',
+    'irr_notes',
+    'land_developpement',
+    'land_price_or_rent',
+    'land_registration',
+    'manufacturer',
+    'manufacturer2',
+    'maximum_output',
+    'model',
+    'number_of_lots_sold',
+    'other_costs_and_features',
+    'output_guarantee',
+    'price_notes',
+    'product_warranty',
+    'property_number',
+    'remote_monitoring',
+
+    'sales_price2',
+    'sign',
+    'status',
+    'subtitle',
+    'system_price',
+    'title',
+
+    'url',
+    'weed_prevention_sheet'
+]
