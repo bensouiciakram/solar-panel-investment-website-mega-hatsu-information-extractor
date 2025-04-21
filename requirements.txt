@@ -1,0 +1,5 @@
+scrapy 
+price_parser
+sqlalchemy
+psycopg2
+pandas 
