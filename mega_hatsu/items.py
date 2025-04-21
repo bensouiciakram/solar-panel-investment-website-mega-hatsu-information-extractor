@@ -1,13 +1,27 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
+"""
+Defines the data structure for scraped items from Mega Hatsu listings.
+
+This module uses Scrapy's Item system to define the fields that will be
+extracted from property listings on mega-hatsu.com. The `MegaHatsuItem`
+class contains all the relevant fields along with optional input and 
+output processors to clean and standardize the scraped data.
+
+Processors:
+    - output_processor=TakeFirst(): Only the first non-null value is taken from the scraped result.
+    - input_processor=lambda: Custom function to convert strings (e.g., with commas) to floats.
+"""
 
 import scrapy
 from itemloaders.processors import TakeFirst
 
 class MegaHatsuItem(scrapy.Item):
+    """
+    Defines the fields for scraped property data from mega-hatsu.com.
 
+    Each field represents a specific property detail or metric, such as
+    pricing, yield, warranty, technical specifications, and URLs.
+    Input and output processors help standardize the data format.
+    """
     title = scrapy.Field(
         output_processor = TakeFirst()
     )#
