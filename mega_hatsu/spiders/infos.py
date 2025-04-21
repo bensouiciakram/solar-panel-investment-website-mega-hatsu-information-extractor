@@ -5,15 +5,36 @@ from mega_hatsu.items import MegaHatsuItem
 from price_parser import Price
 
 class InfosSpider(scrapy.Spider):
+    """Scrapy spider for crawling solar power plant listing data from mega-hatsu.com.
+    
+    This spider is designed to extract detailed information about solar power plants
+    listed for sale on the mega-hatsu.com website. It crawls through paginated listing
+    pages and then visits each individual property page to extract comprehensive details.
+    
+    Attributes:
+        name (str): Identifier for the spider used by Scrapy framework.
+        allowed_domains (list): Domain(s) the spider is allowed to crawl.
+        start_urls (list): Initial URL(s) where the spider begins crawling.
+        listing_template (str): URL template for paginated listing pages.
+    """
     name = 'infos'
     allowed_domains = ['mega-hatsu.com']
     start_urls = ['https://mega-hatsu.com/article-for-sale/']
 
     def __init__(self):
+        """Initialize the spider with URL templates for pagination."""
         self.listing_template = 'https://mega-hatsu.com/article-for-sale/page/{}/'
         
 
     def parse(self, response):
+        """Parse the initial response and generate requests for all listing pages.
+        
+        Args:
+            response (scrapy.http.Response): The response object from the start URL.
+            
+        Yields:
+            scrapy.Request: Request objects for each paginated listing page.
+        """
         total_pages = self.get_total_pages(response)
         for page in range(1,total_pages +1 ):
             yield Request(
@@ -23,6 +44,14 @@ class InfosSpider(scrapy.Spider):
 
     
     def parse_individuals(self,response):
+        """Parse a listing page and generate requests for individual property pages.
+        
+        Args:
+            response (scrapy.http.Response): The response object from a listing page.
+            
+        Yields:
+            scrapy.Request: Request objects for each individual property page.
+        """
         individuals_urls = response.css('h5 a::attr(href)').getall()
         for url in individuals_urls :
             yield Request(
@@ -32,6 +61,22 @@ class InfosSpider(scrapy.Spider):
 
 
     def parse_individual(self,response):
+        """Parse an individual property page and extract detailed information.
+        
+        Extracts comprehensive data about a solar power plant property including:
+        - Basic information (title, subtitle, URL)
+        - Pricing and financial details
+        - Technical specifications
+        - Location and legal information
+        - Warranty and guarantee details
+        - Additional features and costs
+        
+        Args:
+            response (scrapy.http.Response): The response object from a property page.
+            
+        Yields:
+            dict: Item containing all extracted property data.
+        """
         loader = ItemLoader(MegaHatsuItem(),response)
         loader.add_value('url',response.url)
         loader.add_xpath('title','string(//h2)')
@@ -87,9 +132,28 @@ class InfosSpider(scrapy.Spider):
 
 
     def get_total_pages(self,response):
+        """Extract the total number of paginated listing pages.
+        
+        Args:
+            response (scrapy.http.Response): The response object from a listing page.
+            
+        Returns:
+            int: Total number of listing pages available.
+        """
         return int(max(response.css('span.pages::text').re('\d+')))
 
 
     def get_price(self,price_string):
+        """Convert a price string into a standardized numerical format.
+        
+        Args:
+            price_string (str): Raw price string from the website.
+            
+        Returns:
+            float: Price value converted to numerical format (in millions).
+            
+        Raises:
+            TypeError: If the price string cannot be parsed.
+        """
         price = Price.fromstring(price_string).amount
         return float(price)*10**6
