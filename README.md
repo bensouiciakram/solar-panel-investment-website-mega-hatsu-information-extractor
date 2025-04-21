@@ -92,3 +92,10 @@ Data is stored in PostgreSQL with the following columns (defined in items.py):
 - Tracking item status (new, still available, or deleted)
 - Deduplication by `identifier`
 - Data cleaning and type conversion
+
+## Requirements 
+- Python 3.7+
+- Scrapy 2.5+
+- PostgreSQL 12+
+- Required Python packages (see `requirements.txt`)
+
