@@ -64,3 +64,31 @@ POSTGRES_DB=mega_hatsu
 - Enable/disable pipelines
 - Set user agent
 
+## Database Setup 
+
+Ensure you have PostgreSQL installed and create the database:
+```bash
+CREATE DATABASE mega_hatsu;
+```
+The pipeline will automatically create the article table with the appropriate schema.
+
+## Running the Spider 
+
+```bash
+scrapy crawl infos
+```
+
+## Output 
+
+Data is stored in PostgreSQL with the following columns (defined in items.py):
+- Basic information: `title`, `subtitle`, `url`, `Map`, `property_number`
+- Financial details: `sales_price`, `Yield`, `estimated_annual_power_generation`
+- Technical specs: `manufacturer`, `total_panel_capacity`, `maximum_output`
+- Status tracking: `status` (new/still available/deleted)
+- And many more fields (see `items.py` for complete list)
+
+## Data Processing Pipeline 
+- Connecting to PostgreSQL
+- Tracking item status (new, still available, or deleted)
+- Deduplication by `identifier`
+- Data cleaning and type conversion
